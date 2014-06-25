@@ -1,0 +1,105 @@
+Written by Paul Mould
+Analysis & Design Discussion for Project 3 ( The jtar Software)
+
+1)	The Goal of the client program:
+•	The goal of this program is to make a pared-down version of the Linux system utility tar that will create a tar file, unpack a tar file and list the files packed into a tar file.
+•	The program would be called jtar
+•	jtar should be called in one of four ways
+1.	jtar –cf tarfile file1 dir1 …    Creates a tar file based on the files and directoris following the name of the tarfile
+2.	jtar –tf  tarfile      List the names of all the files that have been packed into the a tarfile
+3.	jtar –xf tarfile    Reads the tarfile and recreates all the files saved in that tarfile
+4.	jtar –help Prints a description of the three options above and exits
+ 
+2)	Plan for the File Class
+•	The File class would be used to represent a file. The File class would have all the information about the file. 
+•	 There are 5 attributes of the File class:
+1.	 Name attribute – A string containing the name of the file. The name is no longer than 80 characters
+2.	 Size attribute – A string containing the size of the file. The size of the file can be no longer than 6 characters
+3.	Pmode attribute – A string containing the protection mode of the file. 
+4.	Stamp – A string containing the time stamp of the file.
+5.	isDir attribute – A Boolean value stating whether the file is a directory or not.
+•	The File Class would have an explicit constructor used to set the 5 attributes (private variables) of the a File Class object: File( name, size, pmode, stamp)
+•	Operation of the File Class
+1.	getName() – returns the name of the file
+2.	getSize() – returns the size of the file
+3.	getPmode() – returns the protection mode of the file
+4.	getStamp() – returns the time stamp of the file
+5.	getisDir() – returns the boolean variable of whether it is  a directory or not
+6.	
+3)	Plan of cf option – Creating the tar file
+
+•	The cf option creates a tar file based on the files and directories following the name of the tarfile. 
+
+Algorithm for the cf option
+
+Create a list, fileNameList to store the name of the file and directories to put in the tarFile
+Create a list, fileList to store the File class objects  of the files to be added to the tar file
+Create an integer variable, tarSize to hold the size of the tarFile,
+
+For ( each file or directory list in the command line argument)
+{
+	Add the the file or directory name to the list of file names, fileNameList 
+If (file Name is a directory)
+ add all the file names of the files in that directory to the list, fileNameList
+For ( each element in the list, fileNameList)
+{
+	Get the name from the command line arguements
+Get  the time stamp of the file or directory using the stat command
+	Get the size of  the file or directory using the stat command
+	Get the protection mode of the file or directory using the stat command
+
+Create the File Object of the file using the explicit constructor and the file attributes aquired
+If the file is a directory set the File Object as a directory
+Add the File Object to the list of all File Objects, fileList 
+	Add the size of the file or directory to the tarSize Variable
+}
+Create a binary  tar file with the name given in the command line
+Open the tar file
+Write the tar File Size, tarSize to the tarfile
+
+For (each element in the list of File Objects, fileList)
+{
+	Write the File Object to the binary file
+	If ( File Object is a file)
+		Write the text content of the file to the tarfile following the File Object
+}	
+
+
+}
+
+4)	Plan of xfoption – Creating the tar file
+
+•	The xf option reads the tarfile and recreates all the files saved in that tarfile. Inlcuding making all any directories tha must exist to hold the files. The files created should be exactly like the original files. They should have the same access and modification times, and the same protection modes.
+
+Algorithm for the xf option
+
+Open the tar file specified in the command line
+Read the tar file Size of the tar file
+Create an instance of a File Object, FileRead
+While ( not at end of file of the tar file)
+{
+	Read the next File Object in the tar file into the File Object, FileRead
+	If (File Object, FileRead is a file)
+	{
+		Create and open a file with the file Name of the File Object read in
+		Insert the contents of the file from the tar file to the newly created file
+	}
+	Else If ( File Object, FileRead is a directory)
+	{
+Use the mkdir command to create a directory with the directory name of the File Object read in.
+	} 
+Set the Protection mode of the created file or directory to the original protection mode
+Set the modification and access time of the file or directory created  to the original time stamp
+}
+
+
+Data Structures used:
+•	The List data structure was used to store the list of file Names and File Objects
+•	Char * variables were used to store the private variables in the File Class
+ 
+
+
+   	
+
+
+    
